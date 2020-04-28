@@ -44,6 +44,7 @@ function handleRequest(req, res) {
       // READ
     } else if (req.method === "GET" && parsedUrl.pathname === '/users') {
 
+        username = parsedUrl.query.username;
         
         fs.open(usersPath + username + '.json', 'r', (err, fd) => {
           if(err) throw err;
@@ -58,8 +59,13 @@ function handleRequest(req, res) {
               } );
           });
         });
-        // EDIT 
+        // UPDATE 
     } else if (req.method === "PUT" && parsedUrl.pathname === '/users') {
+
+        username = parsedUrl.query.username;
+
+        console.log(parsedUrl);
+        
         fs.open(usersPath + username + '.json', 'r+', (err, fd) => {
           if(err) throw err;
 
@@ -69,12 +75,14 @@ function handleRequest(req, res) {
             fs.close(fd, (err) => {
               if(err) throw err;
               res.end(store);
-            } )
-            
-          })
-        })
+            } );
+          });
+        });
         //DELETE
     } else if (req.method === "DELETE" && parsedUrl.pathname === '/users') {
+
+      username = parsedUrl.query.username;
+
       fs.unlink(usersPath + username + '.json', () => {
         res.end('File successfully deleted');
       })
@@ -85,6 +93,6 @@ function handleRequest(req, res) {
   });
 }
 
-server.listen(3002, () => {
+server.listen(4000, () => {
   console.log("server started");
 });
